@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "419035655472",
+    "project_id": "weatherworks-4cdea",
+    "storage_bucket": "weatherworks-4cdea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:419035655472:android:50de9afbbe98d21597ecf5",
+        "android_client_info": {
+          "package_name": "com.beriya.weatherworks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "419035655472-chtrvdgs9q5shgqo0q5sj4tcqgoogt4p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.beriya.weatherworks",
+            "certificate_hash": "97aa640ef763cb32799a79f5c5b43b09f8b26475"
+          }
+        },
+        {
+          "client_id": "419035655472-0q1erti4f2idimkghljmv394co4qjtbj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-A3zpltQziFXXDpBcv6AKpW1BoRbWVKg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "419035655472-0q1erti4f2idimkghljmv394co4qjtbj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
