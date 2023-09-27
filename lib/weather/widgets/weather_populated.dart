@@ -26,7 +26,7 @@ class WeatherPopulated extends StatelessWidget {
         RefreshIndicator(
           onRefresh: onRefresh,
           child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
+            physics: BouncingScrollPhysics(),
             clipBehavior: Clip.none,
             child: Center(
               child: Column(
@@ -54,6 +54,7 @@ class WeatherPopulated extends StatelessWidget {
                     height: height*0.6,
                     // color: Colors.red,
                     child: ListView.separated(
+                      physics: NeverScrollableScrollPhysics(),
                         itemCount: weather.daily.maxTemperatures.length,
                       separatorBuilder: (BuildContext context, int index) => const Divider(),
                       itemBuilder: (BuildContext context, int index) {

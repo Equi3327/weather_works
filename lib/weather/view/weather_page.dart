@@ -158,6 +158,7 @@ class _WeatherViewState extends State<WeatherView> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           FloatingActionButton(
+            heroTag: "Current Location",
             backgroundColor: const Color(0xFF00BCD4),
             child: const Icon(Icons.my_location, semanticLabel: 'Current Location',),
             // label: Text("Search City"),
@@ -168,6 +169,7 @@ class _WeatherViewState extends State<WeatherView> {
             },
           ),
           FloatingActionButton.extended(
+            heroTag: "Search",
             backgroundColor: const Color(0xFF00BCD4),
             icon: const Icon(Icons.search, semanticLabel: 'Search',),
             label: Text("Search City"),
