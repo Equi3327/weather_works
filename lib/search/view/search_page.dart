@@ -34,6 +34,12 @@ class _SearchPageState extends State<SearchPage> {
               child: TextField(
                 controller: _textController,
                 decoration: const InputDecoration(
+                  labelStyle: TextStyle(
+                    color:  const Color(0xFF00BCD4),
+                  ),
+                  hintStyle: TextStyle(
+                    color:  const Color(0xFF00BCD4),
+                  ),
                   labelText: 'City',
                   hintText: 'Chicago',
                 ),
@@ -42,7 +48,7 @@ class _SearchPageState extends State<SearchPage> {
           ),
           IconButton(
             key: const Key('searchPage_search_iconButton'),
-            icon: const Icon(Icons.search, semanticLabel: 'Submit'),
+            icon: const Icon(Icons.send, semanticLabel: 'Submit',color: const Color(0xFF00BCD4),),
             onPressed: () => Navigator.of(context).pop(_text),
           )
         ],

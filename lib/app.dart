@@ -34,10 +34,12 @@ class WeatherAppView extends StatelessWidget {
     return BlocBuilder<ThemeCubit, Color>(
       builder: (context, color) {
         return MaterialApp(
+          debugShowCheckedModeBanner:false,
           theme: ThemeData(
             primaryColor: color,
             textTheme: GoogleFonts.rajdhaniTextTheme(),
             appBarTheme: AppBarTheme(
+              color: const Color(0xFF00BCD4),
               titleTextStyle: GoogleFonts.rajdhaniTextTheme(textTheme)
                   .apply(bodyColor: Colors.white)
                   .titleLarge,

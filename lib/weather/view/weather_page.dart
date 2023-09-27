@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:weather_repository/weather_repository.dart';
 
 import '../../app/bloc/app_bloc.dart';
+import '../../home/widgets/avatar.dart';
 import '../../search/view/search_page.dart';
 import '../../theme/cubit/theme_cubit.dart';
 import '../cubit/weather_cubit.dart';
@@ -114,6 +115,7 @@ class _WeatherViewState extends State<WeatherView> {
     final user = context.select((AppBloc bloc) => bloc.state.user);
     return Scaffold(
       appBar: AppBar(
+        leading: Avatar(photo: user.photo),
         title: const Text('Weather'),
         centerTitle: true,
         actions: [
@@ -152,14 +154,32 @@ class _WeatherViewState extends State<WeatherView> {
           }
         },
       )),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.search, semanticLabel: 'Search'),
-        onPressed: () async {
-          final city = await Navigator.of(context).push(SearchPage.route());
-          if (!mounted) return;
-          await context.read<WeatherCubit>().fetchWeather(city);
-        },
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          FloatingActionButton(
+            backgroundColor: const Color(0xFF00BCD4),
+            child: const Icon(Icons.my_location, semanticLabel: 'Current Location',),
+            // label: Text("Search City"),
+            onPressed: () async {
+              // final city = await Navigator.of(context).push(SearchPage.route());
+              // if (!mounted) return;
+              context.read<WeatherCubit>().fetchWeatherCurrentLocation(widget.latitude, widget.longitude);
+            },
+          ),
+          FloatingActionButton.extended(
+            backgroundColor: const Color(0xFF00BCD4),
+            icon: const Icon(Icons.search, semanticLabel: 'Search',),
+            label: Text("Search City"),
+            onPressed: () async {
+              final city = await Navigator.of(context).push(SearchPage.route());
+              if (!mounted) return;
+              await context.read<WeatherCubit>().fetchWeather(city);
+            },
+          ),
+        ],
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

@@ -63,7 +63,7 @@ class OpenMeteoApiClient {
       'latitude': '$latitude',
       'longitude': '$longitude',
       'current_weather': 'true',
-      'forecast_days':"10",
+      'forecast_days':"7",
       'daily':'temperature_2m_max,temperature_2m_min',
     });
 
