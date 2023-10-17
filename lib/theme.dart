@@ -15,7 +15,7 @@ final theme = ThemeData(
     secondary:  Color(0xffffffff).withOpacity(0.5),
   ),
   appBarTheme: AppBarTheme(
-    color: const Color(0xffffffff).withOpacity(0.5),
+    color:  Colors.grey.withOpacity(0.4),
     titleTextStyle: GoogleFonts.poppinsTextTheme(GoogleFonts.poppinsTextTheme())
         .apply(bodyColor: Color(0xFF363B64),)
         .titleLarge,

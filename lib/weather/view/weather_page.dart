@@ -4,13 +4,18 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:weather_repository/weather_repository.dart';
+import 'package:weather_works/widgets/headings_home.dart';
 
 import '../../app/bloc/app_bloc.dart';
 import '../../home/widgets/avatar.dart';
 import '../../search/view/search_page.dart';
 import '../../theme/cubit/theme_cubit.dart';
 import '../../widgets/current_weather.dart';
+import '../../widgets/forecast_weekly.dart';
+import '../../widgets/sun_conditions.dart';
+import '../../widgets/wind_conditions.dart';
 import '../cubit/weather_cubit.dart';
+import '../../widgets/forecast_timely.dart';
 import '../widgets/weather_empty.dart';
 import '../widgets/weather_error.dart';
 import '../widgets/weather_loading.dart';
@@ -29,8 +34,7 @@ class _WeatherPageState extends State<WeatherPage> {
   Future<void> _getCurrentPosition() async {
     final hasPermission = await _handleLocationPermission();
     if (!hasPermission) return;
-    await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high)
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
         .then((Position position) {
       setState(() => _currentPosition = position);
     }).catchError((e) {
@@ -45,7 +49,8 @@ class _WeatherPageState extends State<WeatherPage> {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Location services are disabled. Please enable the services')));
+          content: Text(
+              'Location services are disabled. Please enable the services')));
       return false;
     }
     permission = await Geolocator.checkPermission();
@@ -59,7 +64,8 @@ class _WeatherPageState extends State<WeatherPage> {
     }
     if (permission == LocationPermission.deniedForever) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Location permissions are permanently denied, we cannot request permissions.')));
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
       return false;
     }
     return true;
@@ -75,150 +81,122 @@ class _WeatherPageState extends State<WeatherPage> {
         _getCurrentPosition();
       });
     });
-
   }
+
   @override
   Widget build(BuildContext context) {
-    if(_currentPosition==null) {
+    if (_currentPosition == null) {
       return Container(
         color: Colors.white,
         child: (Center(
           child: CircularProgressIndicator(),
         )),
       );
-    }else{
+    } else {
       return BlocProvider(
         create: (context) => WeatherCubit(context.read<WeatherRepository>()),
-        child:  WeatherView(latitude: _currentPosition!.latitude, longitude: _currentPosition!.longitude,),
+        child: WeatherView(
+          latitude: _currentPosition!.latitude,
+          longitude: _currentPosition!.longitude,
+        ),
       );
     }
   }
 }
 
 class WeatherView extends StatefulWidget {
-  const WeatherView({super.key, required this.latitude, required this.longitude});
+  const WeatherView(
+      {super.key, required this.latitude, required this.longitude});
   final double latitude;
   final double longitude;
   @override
   State<WeatherView> createState() => _WeatherViewState();
 }
 
-
 class _WeatherViewState extends State<WeatherView> {
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    context.read<WeatherCubit>().fetchWeatherCurrentLocation(widget.latitude, widget.longitude);
+    context
+        .read<WeatherCubit>()
+        .fetchWeatherCurrentLocation(widget.latitude, widget.longitude);
   }
+
   @override
   Widget build(BuildContext context) {
     final user = context.select((AppBloc bloc) => bloc.state.user);
     return Scaffold(
-
+      resizeToAvoidBottomInset: true,
+      // extendBody:true,
       appBar: AppBar(
         leadingWidth: 30.0,
         leading: Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: SvgPicture.asset("assets/drawer-icon.svg"),
         ),
-      //   Icon(
-      //     Icons.density_large_rounded,
-      //     color: Color(0xFF363B64),
-      // ),
+        //   Icon(
+        //     Icons.density_large_rounded,
+        //     color: Color(0xFF363B64),
+        // ),
         title: const Text(
           'Weather',
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-        ),),
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         centerTitle: true,
         actions: [
           IconButton(
             key: const Key('homePage_logout_iconButton'),
-            icon: const Icon(Icons.exit_to_app,color: Color(0xFF363B64),),
+            icon: const Icon(
+              Icons.exit_to_app,
+              color: Color(0xFF363B64),
+            ),
             onPressed: () {
               context.read<AppBloc>().add(const AppLogoutRequested());
             },
           ),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          LiveWeather(),
-          Container(
-            width: 209,
-            height: 343,
-            decoration: ShapeDecoration(
-              gradient: LinearGradient(
-                begin: Alignment(-0.98, -0.21),
-                end: Alignment(0.98, 0.21),
-                colors: [Colors.white, Colors.white.withOpacity(0)],
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height * 1.78,
+          decoration: BoxDecoration(
+            // color: Colors.grey.withOpacity(0),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.grey.withOpacity(0.4),
+                Colors.grey.withOpacity(0)
+              ],
             ),
+            // shape: RoundedRectangleBorder(
+            //   side: BorderSide(
+            //     width: 3,
+            //     strokeAlign: BorderSide.strokeAlignOutside,
+            //     color: Colors.white,
+            //   ),
+            //   borderRadius: BorderRadius.circular(20),
+            // ),
           ),
-        ],
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              LiveWeather(),
+              TimelyForcast(),
+              HomeHeadings(title: "Forecast"),
+              WeeklyForcast(),
+              HomeHeadings(title: "Sun Conditions"),
+              SunConditions(),
+              HomeHeadings(title: "Wind"),
+              WindConditions(),
+            ],
+          ),
+        ),
       ),
-      // Center(
-      //     child: BlocConsumer<WeatherCubit, WeatherState>(
-      //   listener: (context, state) {
-      //     if (state.status.isSuccess) {
-      //       // context.read<ThemeCubit>().updateTheme(state.weather);
-      //     }
-      //   },
-      //   builder: (context, state) {
-      //     switch (state.status) {
-      //       case WeatherStatus.initial:
-      //         return const WeatherEmpty();
-      //       case WeatherStatus.loading:
-      //         return const WeatherLoading();
-      //       case WeatherStatus.success:
-      //         return WeatherPopulated(
-      //           weather: state.weather,
-      //           units: state.temperatureUnits,
-      //           onRefresh: () {
-      //             return context.read<WeatherCubit>().refreshWeather();
-      //           },
-      //         );
-      //       case WeatherStatus.failure:
-      //         return const WeatherError();
-      //     }
-      //   },
-      // ),
-      // ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          FloatingActionButton(
-            heroTag: "Current Location",
-            backgroundColor: const Color(0xFF00BCD4),
-            child: const Icon(Icons.my_location, semanticLabel: 'Current Location',),
-            // label: Text("Search City"),
-            onPressed: () async {
-              // final city = await Navigator.of(context).push(SearchPage.route());
-              // if (!mounted) return;
-              context.read<WeatherCubit>().fetchWeatherCurrentLocation(widget.latitude, widget.longitude);
-            },
-          ),
-          FloatingActionButton.extended(
-            heroTag: "Search",
-            backgroundColor: const Color(0xFF00BCD4),
-            icon: const Icon(Icons.search, semanticLabel: 'Search',),
-            label: Text("Search City"),
-            onPressed: () async {
-              final city = await Navigator.of(context).push(SearchPage.route());
-              if (!mounted) return;
-              await context.read<WeatherCubit>().fetchWeather(city);
-            },
-          ),
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

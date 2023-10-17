@@ -10,7 +10,7 @@ class LiveWeather extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    debugPrint("+++++++++${width}");
+    // debugPrint("+++++++++${width}");
     return Container(
       width: width,
       height: width*(0.6),
@@ -33,40 +33,47 @@ class LiveWeather extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                // mainAxisSize: MainAxisSize.max,
-                children: [
-                  Text(
-                    'Chance of rain 60%',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      // fontFamily: GoogleFonts.poppinsTextTheme().
-                      //   s
-                      // ),
-                      fontWeight: FontWeight.w400,
-                      // height: 0.07,
+              Flexible(
+                flex: 3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  // mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text(
+                      'Chance of rain 60%',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        // fontFamily: GoogleFonts.poppinsTextTheme().
+                        //   s
+                        // ),
+                        fontWeight: FontWeight.w400,
+                        // height: 0.07,
+                      ),
                     ),
-                  ),
-                  Text(
-                    'Partly Cloudy',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 28,
-                      // fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w700,
+                    Text(
+                      'Partly Cloudy',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 28,
+                        // fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w700,
 
+                      ),
                     ),
-                  )
-                ],
+
+                  ],
+                ),
               ),
-              Image.asset(
-                  "assets/cloudy_weather.png",
-                height: width/4.0,
-                // width: width/4.0,
-                fit: BoxFit.fill,
+              Flexible(
+                flex: 2,
+                child: Image.asset(
+                    "assets/cloudy_weather.png",
+                  height: width/4.0,
+                  // width: width/4.0,
+                  fit: BoxFit.fill,
+                ),
               )
             ],
           ),
@@ -153,7 +160,7 @@ class LiveWeather extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0),
-                    child: SvgPicture.asset("assets/weather-hail.svg"),
+                    child: SvgPicture.asset("assets/weather-hail.svg",width: 24,),
                   ),
                   Text(
                     '10%',
@@ -172,7 +179,7 @@ class LiveWeather extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0),
-                    child: SvgPicture.asset("assets/weather-sunny.svg"),
+                    child: SvgPicture.asset("assets/weather-sunny.svg",width: 24,),
                   ),
                   Text(
                     '0.5',
@@ -188,10 +195,11 @@ class LiveWeather extends StatelessWidget {
                 ],
               ),
               Row(
+
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0),
-                    child: SvgPicture.asset("assets/weather-windy.svg"),
+                    child: SvgPicture.asset("assets/weather-windy.svg",width: 24,),
                   ),
                   Text(
                     '124 mp/h',
