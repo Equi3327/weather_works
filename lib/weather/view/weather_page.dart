@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:weather_repository/weather_repository.dart';
@@ -8,6 +9,7 @@ import '../../app/bloc/app_bloc.dart';
 import '../../home/widgets/avatar.dart';
 import '../../search/view/search_page.dart';
 import '../../theme/cubit/theme_cubit.dart';
+import '../../widgets/current_weather.dart';
 import '../cubit/weather_cubit.dart';
 import '../widgets/weather_empty.dart';
 import '../widgets/weather_error.dart';
@@ -114,46 +116,81 @@ class _WeatherViewState extends State<WeatherView> {
   Widget build(BuildContext context) {
     final user = context.select((AppBloc bloc) => bloc.state.user);
     return Scaffold(
+
       appBar: AppBar(
-        leading: Avatar(photo: user.photo),
-        title: const Text('Weather'),
+        leadingWidth: 30.0,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: SvgPicture.asset("assets/drawer-icon.svg"),
+        ),
+      //   Icon(
+      //     Icons.density_large_rounded,
+      //     color: Color(0xFF363B64),
+      // ),
+        title: const Text(
+          'Weather',
+        style: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        ),),
         centerTitle: true,
         actions: [
           IconButton(
             key: const Key('homePage_logout_iconButton'),
-            icon: const Icon(Icons.exit_to_app),
+            icon: const Icon(Icons.exit_to_app,color: Color(0xFF363B64),),
             onPressed: () {
               context.read<AppBloc>().add(const AppLogoutRequested());
             },
           ),
         ],
       ),
-      body: Center(
-          child: BlocConsumer<WeatherCubit, WeatherState>(
-        listener: (context, state) {
-          if (state.status.isSuccess) {
-            context.read<ThemeCubit>().updateTheme(state.weather);
-          }
-        },
-        builder: (context, state) {
-          switch (state.status) {
-            case WeatherStatus.initial:
-              return const WeatherEmpty();
-            case WeatherStatus.loading:
-              return const WeatherLoading();
-            case WeatherStatus.success:
-              return WeatherPopulated(
-                weather: state.weather,
-                units: state.temperatureUnits,
-                onRefresh: () {
-                  return context.read<WeatherCubit>().refreshWeather();
-                },
-              );
-            case WeatherStatus.failure:
-              return const WeatherError();
-          }
-        },
-      )),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          LiveWeather(),
+          Container(
+            width: 209,
+            height: 343,
+            decoration: ShapeDecoration(
+              gradient: LinearGradient(
+                begin: Alignment(-0.98, -0.21),
+                end: Alignment(0.98, 0.21),
+                colors: [Colors.white, Colors.white.withOpacity(0)],
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+          ),
+        ],
+      ),
+      // Center(
+      //     child: BlocConsumer<WeatherCubit, WeatherState>(
+      //   listener: (context, state) {
+      //     if (state.status.isSuccess) {
+      //       // context.read<ThemeCubit>().updateTheme(state.weather);
+      //     }
+      //   },
+      //   builder: (context, state) {
+      //     switch (state.status) {
+      //       case WeatherStatus.initial:
+      //         return const WeatherEmpty();
+      //       case WeatherStatus.loading:
+      //         return const WeatherLoading();
+      //       case WeatherStatus.success:
+      //         return WeatherPopulated(
+      //           weather: state.weather,
+      //           units: state.temperatureUnits,
+      //           onRefresh: () {
+      //             return context.read<WeatherCubit>().refreshWeather();
+      //           },
+      //         );
+      //       case WeatherStatus.failure:
+      //         return const WeatherError();
+      //     }
+      //   },
+      // ),
+      // ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
